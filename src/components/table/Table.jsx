@@ -1,4 +1,6 @@
-import "./table.scss"
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,103 +9,73 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-// Made by Moses Mwila 
-// for Zykar Solutions Limited
-
 const List = () => {
+  const [emails, setEmails] = useState([]);
 
- const rows = [
-    {
-        id: 11443155,
-        product: "Accer Nitro 5",
-        img: "https://m.media-amazon.com/images/I/81bc8mA3nKL._AC_UY327_FMwebp_QL65_.jpg",
-        customer: "Arlyn Mwila",
-        date: "1 March",
-        amount: 987,
-        method: "Cash On Delivery",
-        status: "Approved",
-    },
-    {
-        id: 2235235,
-        product: "Playstation 5",
-        img: "https://m.media-amazon.com/images/I/81bc8mA3nKL._AC_UY327_FMwebp_QL65_.jpg",
-        customer: "Jamal Banda",
-        date: "1 April",
-        amount: 2057,
-        method: "Mobile Money",
-        status: "Pending",
-    },
-    {
-        id: 11443155,
-        product: "Denim Jeans 5",
-        img: "https://m.media-amazon.com/images/I/81bc8mA3nKL._AC_UY327_FMwebp_QL65_.jpg",
-        customer: "Monse Tembo",
-        date: "1 May",
-        amount: 687,
-        method: "Cash On Delivery",
-        status: "Approved",
-    },
-    {
-        id: 2235235,
-        product: "Apple Iphone 14",
-        img: "https://m.media-amazon.com/images/I/81bc8mA3nKL._AC_UY327_FMwebp_QL65_.jpg",
-        customer: "Arlyn Mwila",
-        date: "1 June",
-        amount: 1757,
-        method: "Online Payment",
-        status: "Approved",
-    },
-    {
-        id: 2235235,
-        product: "Apple Iphone 14 Pro",
-        img: "https://images.pexels.com/photos/428338/pexels-photo-428338.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        customer: "Oscar Bwalya",
-        date: "1 June",
-        amount: 7757,
-        method: "Online Payment",
-        status: "Approved",
-    },
- ];
+  useEffect(() => {
+    const fetchEmails = async () => {
+      try {
+        const response = await axios.get(
+          'https://www.googleapis.com/gmail/v1/users/me/messages',
+          {
+            headers: {
+              Authorization: `Bearer YOUR_ACCESS_TOKEN`, // Replace with your actual access token
+            },
+            params: {
+              maxResults: 10, // Fetch only the first 10 emails
+            },
+          }
+        );
 
+        const emailList = response.data.messages;
+        const formattedEmails = await Promise.all(
+          emailList.map(async (email) => {
+            const emailResponse = await axios.get(
+              `https://www.googleapis.com/gmail/v1/users/me/messages/${email.id}`,
+              {
+                headers: {
+                  Authorization: ``, // Replace with your actual access token
+                },
+              }
+            );
+
+            const content = emailResponse.data.snippet;
+            return {
+              mail_ID: email.id,
+              content: content,
+            };
+          })
+        );
+
+        setEmails(formattedEmails);
+      } catch (error) {
+        console.error('Error fetching emails:', error);
+      }
+    };
+
+    fetchEmails();
+  }, []);
 
   return (
     <TableContainer component={Paper} className="table">
-    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-      <TableHead>
-        <TableRow>
-          <TableCell className="tableCell">Tracking ID</TableCell>
-          <TableCell className="tableCell">Product</TableCell>
-          <TableCell className="tableCell">Customer</TableCell>
-          <TableCell className="tableCell">Date</TableCell>
-          <TableCell className="tableCell">Amount</TableCell>
-          <TableCell className="tableCell">Payment Method</TableCell>
-          <TableCell className="tableCell">Status</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {rows.map((row) => (
-          <TableRow
-            key={row.id} >
-            <TableCell className="tableCell" align="right">{row.id}</TableCell>
-            <TableCell className="tableCell" align="right">
-              <div className="cellWrapper">
-                <img src={row.img} alt="" className="image" />
-                {row.product}
-              </div>
-            </TableCell>
-            <TableCell className="tableCell">{row.customer}</TableCell>
-            <TableCell className="tableCell">{row.date}</TableCell>
-            <TableCell className="tableCell">{row.amount}</TableCell>
-            <TableCell className="tableCell">{row.method}</TableCell>
-            <TableCell className="tableCell">
-              <span className={`status ${row.status}`}>{row.status}</span>
-            </TableCell>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell className="tableCell">Mail ID</TableCell>
+            <TableCell className="tableCell">Content</TableCell>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </TableContainer>
-  )
-}
+        </TableHead>
+        <TableBody>
+          {emails.map((row) => (
+            <TableRow key={row.mail_ID}>
+              <TableCell className="tableCell">{row.mail_ID}</TableCell>
+              <TableCell className="tableCell">{row.content}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
 
-export default List
+export default List;

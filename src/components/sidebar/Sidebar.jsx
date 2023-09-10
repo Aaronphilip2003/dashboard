@@ -1,19 +1,14 @@
 import "./sidebar.scss"
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import StoreIcon from '@mui/icons-material/Store';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import AnalyticsIcon from '@mui/icons-material/Analytics';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import SettingsSystemDaydreamOutlinedIcon from '@mui/icons-material/SettingsSystemDaydreamOutlined';
-import PsychologyOutlinedIcon from '@mui/icons-material/PsychologyOutlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import InputOutlinedIcon from '@mui/icons-material/InputOutlined';
 import {Link} from "react-router-dom";
 import { useContext} from "react";
 import { DarkModeContext} from "../../context/darkModeContext";
+
+import MailIcon from '@mui/icons-material/Mail';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import chatgpticon from "./chatgpticon.png"
+
 
 const Sidebar = () => {
 
@@ -24,69 +19,33 @@ const Sidebar = () => {
     <div className="top">
       <Link to="/" style={{textDecoration: "none"}}>
 
-     <span className="logo">Zykar Admin</span>
+     <span className="logo">Dashboard</span>
      </Link>
     </div>
     <hr />
     <div className="center">
         <ul>
-           <p className="title">MAIN</p>
-          <li>
-            <DashboardIcon className="icon" />
-            <span>Dashboard</span>
+           <p className="">Quick Access</p>
+          <li>            
             </li>
-            <p className="title">LISTS</p>
-            <Link to="/users" style={{textDecoration: "none"}}>
+            <a href="https://www.gmail.com" style={{ textDecoration: "none" }} target="_blank" rel="noopener noreferrer">
+              <li>
+                <MailIcon className="icon" />
+                <span>Gmail</span>
+              </li>
+            </a>
+            <a href="https://github.com/Aaronphilip2003" style={{textDecoration: "none"}}  target="_blank" rel="noopener noreferrer">
             <li>
-              <PersonOutlineOutlinedIcon className="icon" />
-            <span>Users</span>
+              <GitHubIcon className="icon" />
+            <span>Github</span>
             </li>
-            </Link>
-            <Link to="/products" style={{textDecoration: "none"}}>
+            </a>
+            <a href="https://chat.openai.com/" style={{textDecoration: "none"}}  target="_blank" rel="noopener noreferrer">
             <li>
-              <StoreIcon className="icon" />
-            <span>Products</span>
+              <img src={chatgpticon}/>
+            <span>ChatGPT</span>
             </li>
-            </Link>
-            <li>
-              <CreditCardIcon className="icon" />
-            <span>Orders</span>
-            </li>
-            <li>
-              <LocalShippingIcon className="icon" />
-            <span>Delivery</span>
-            </li>
-            <p className="title">USEFUL LINKS</p>
-            <li>
-              <AnalyticsIcon className="icon" />
-            <span>Stats</span>
-            </li>
-            <li>
-              <NotificationsNoneOutlinedIcon className="icon" />
-            <span>Notifications</span>
-            </li>
-            <p className="title">SERVICE</p>
-            <li>
-              <SettingsSystemDaydreamOutlinedIcon className="icon" />
-            <span>System Health</span>
-            </li>
-            <li>
-              <PsychologyOutlinedIcon className="icon" />
-            <span>Logs</span>
-            </li>
-            <li>
-              <AccountCircleOutlinedIcon className="icon" />
-            <span>Settings</span>
-            </li>
-            <p className="title">USER</p>
-            <li>
-              <SettingsOutlinedIcon className="icon" />
-            <span>Profile</span>
-            </li>
-            <li>
-              <InputOutlinedIcon className="icon" />
-            <span>Logout</span>
-            </li>
+            </a>
         </ul>
 
     </div>
